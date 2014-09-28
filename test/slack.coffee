@@ -17,7 +17,7 @@ beforeEach ->
     # Hubot.Robot instance
     robot:
       name: 'Kitt'
-      brain: { data: { channelMapping: {test: '123'}} }
+      brain: { channelMapping: {test: '123'} }
 
     # Express request object
     request: ->
