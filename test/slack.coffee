@@ -17,6 +17,7 @@ beforeEach ->
     # Hubot.Robot instance
     robot:
       name: 'Kitt'
+      brain: { data: { channelMapping: {test: '123'}} }
 
     # Express request object
     request: ->
@@ -38,6 +39,8 @@ describe 'Adapter', ->
   it 'Should initialize with a robot', ->
     slack.robot.name.should.eql stubs.robot.name
 
+  it 'Should initialize with a room mapping', ->
+    slack.channelMapping['test'].should.eql '123'
 
 describe '(Un)escaping strings', ->
   # Generate strings with multiple replacement characters

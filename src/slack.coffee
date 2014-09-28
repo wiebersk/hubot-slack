@@ -4,7 +4,7 @@ https = require 'https'
 class Slack extends Adapter
   constructor: (robot) ->
     super robot
-    @channelMapping = {}
+    @channelMapping = robot.brain.data.channelMapping || {}
 
 
   ###################################################################
@@ -14,14 +14,12 @@ class Slack extends Adapter
   log: console.log.bind console
   logError: console.error.bind console
 
-
   ###################################################################
   # Communicating back to the chat rooms. These are exposed
   # as methods on the argument passed to callbacks from
   # robot.respond, robot.listen, etc.
   ###################################################################
   send: (envelope, strings...) ->
-    @log "Sending message"
     channel = envelope.reply_to || @channelMapping[envelope.room] || envelope.room
 
     strings.forEach (str) =>
@@ -167,6 +165,7 @@ class Slack extends Adapter
       author.reply_to = req.param 'channel_id'
       author.room = req.param 'channel_name'
       self.channelMapping[req.param 'channel_name'] = req.param 'channel_id'
+      self.robot.brain.data.channelMapping[req.param 'channel_name'] = req.param 'channel_id'
 
       if hubotMsg and author
         # Pass to the robot
