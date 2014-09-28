@@ -4,7 +4,11 @@ https = require 'https'
 class Slack extends Adapter
   constructor: (robot) ->
     super robot
-    @channelMapping = robot.brain.channelMapping || {}
+    if robot.brain.channelMapping
+      @channelMapping = robot.brain.channelMapping
+    else
+      @channelMapping = {}
+      robot.brain.channelMapping = {}
 
 
   ###################################################################
