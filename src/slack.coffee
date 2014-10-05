@@ -167,7 +167,6 @@ class Slack extends Adapter
       author = self.robot.brain.userForId author.id, author
       author.reply_to = req.param 'channel_id'
       author.room = req.param 'channel_name'
-      self.channelMapping[req.param 'channel_name'] = req.param 'channel_id'
       self.robot.brain.channelMapping[req.param 'channel_name'] = req.param 'channel_id'
 
       if hubotMsg and author
