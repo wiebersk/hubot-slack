@@ -7,7 +7,6 @@ class Slack extends Adapter
     if robot.brain.channelMapping
       @channelMapping = robot.brain.channelMapping
     else
-      @channelMapping = {}
       robot.brain.channelMapping = {}
 
 
@@ -24,7 +23,7 @@ class Slack extends Adapter
   # robot.respond, robot.listen, etc.
   ###################################################################
   send: (envelope, strings...) ->
-    channel = envelope.reply_to || @channelMapping[envelope.room] || envelope.room
+    channel = envelope.reply_to || robot.brain.channelMapping[envelope.room] || envelope.room
 
     strings.forEach (str) =>
       str = @escapeHtml str
@@ -51,7 +50,7 @@ class Slack extends Adapter
   custom: (message, data)->
     @log "Sending custom message"
 
-    channel = message.reply_to || @channelMapping[message.room] || message.room
+    channel = message.reply_to || robot.brain.channelMapping[message.room] || message.room
 
     attachment =
       text     : @escapeHtml data.text
