@@ -4,10 +4,11 @@ https = require 'https'
 class Slack extends Adapter
   constructor: (robot) ->
     super robot
-    if robot.brain.channelMapping
-      @channelMapping = robot.brain.channelMapping
+    if robot.brain.data.channelMapping
+      @channelMapping = robot.brain.data.channelMapping
     else
-      robot.brain.channelMapping = {}
+      robot.brain.data.channelMapping = {}
+
 
 
   ###################################################################
@@ -23,7 +24,7 @@ class Slack extends Adapter
   # robot.respond, robot.listen, etc.
   ###################################################################
   send: (envelope, strings...) ->
-    channel = envelope.reply_to || @robot.brain.channelMapping[envelope.room] || envelope.room
+    channel = envelope.reply_to || @robot.brain.data.channelMapping[envelope.room] || envelope.room
 
     strings.forEach (str) =>
       str = @escapeHtml str
@@ -50,7 +51,7 @@ class Slack extends Adapter
   custom: (message, data)->
     @log "Sending custom message"
 
-    channel = message.reply_to || @robot.brain.channelMapping[message.room] || message.room
+    channel = message.reply_to || @robot.brain.data.channelMapping[message.room] || message.room
 
     attachment =
       text     : @escapeHtml data.text
@@ -167,7 +168,7 @@ class Slack extends Adapter
       author = self.robot.brain.userForId author.id, author
       author.reply_to = req.param 'channel_id'
       author.room = req.param 'channel_name'
-      self.robot.brain.channelMapping[req.param 'channel_name'] = req.param 'channel_id'
+      self.robot.brain.data.channelMapping[req.param 'channel_name'] = req.param 'channel_id'
 
       if hubotMsg and author
         # Pass to the robot
